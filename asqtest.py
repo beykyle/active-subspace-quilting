@@ -14,39 +14,8 @@ angles = np.linspace(0, np.pi, 200)
 s_mesh = np.linspace(1e-2, 8 * np.pi, 1000)
 domain = np.array([s_mesh[0], s_mesh[-1]])
 s_0 = 7 * np.pi
-params =  np.load("kd_ff_params.npy")
-lower_bound = np.min(params, axis=(0, 1))
-upper_bound = np.max(params, axis=(0, 1))
-bounds = np.vstack([lower_bound, upper_bound]).T
-frozen_params = bounds[:,1] == bounds[:,0]
-unfrozen_mask = np.logical_not(frozen_params)
-param_labels  =np.asarray(
-    [
-        r"$E$",
-        r"$\mu$",
-        r"$v_v$",
-        r"$r_v$",
-        r"$a_v$",
-        r"$v_w$",
-        r"$r_{w}$",
-        r"$a_{w}$",
-        r"$v_d$",
-        r"$r_{d}$",
-        r"$a_d$",
-        r"$v_{so}$",
-        r"$r_{so}$",
-        r"$a_{so}$",
-        r"$w_{so}$",
-        r"$r_{wso}$",
-        r"$a_{wso}$",
-    ]
-
-)
-
-n_train = 3000
-n_test = 500
-train = latin_hypercube_sample(n_train, bounds, seed=133)
-test = latin_hypercube_sample(n_test, bounds, seed=111)
+bounds = np.load("./kd_ff_bounds.npy")
+train = np.load("./kd_ff_train.npy")
 
 # use log(E) space
 scaleE = 1.0
@@ -88,4 +57,5 @@ asq = rose.ActiveSubspaceQuilt(
     threads=8,
 )
 
+np.save("kd_ff_hfsoln_train.npy", asq.hf_solns )
 asq.save("asq.pkl")

@@ -73,28 +73,8 @@ upper_bound = np.max(params, axis=(0, 1))
 bounds = np.vstack([lower_bound, upper_bound]).T
 frozen_params = bounds[:,1] == bounds[:,0]
 unfrozen_mask = np.logical_not(frozen_params)
-param_labels  =np.asarray(
-    [
-        r"$E$",
-        r"$\mu$",
-        r"$v_v$",
-        r"$r_v$",
-        r"$a_v$",
-        r"$v_w$",
-        r"$r_{w}$",
-        r"$a_{w}$",
-        r"$v_d$",
-        r"$r_{d}$",
-        r"$a_d$",
-        r"$v_{so}$",
-        r"$r_{so}$",
-        r"$a_{so}$",
-        r"$w_{so}$",
-        r"$r_{wso}$",
-        r"$a_{wso}$",
-    ]
+np.save("./kd_ff_bounds.npy", bounds)
 
-)
 n_train = 3000
 n_train_log = 500
 n_test = 1000
@@ -107,4 +87,4 @@ log_train = latin_hypercube_sample(n_train_log, log_energy_bounds, seed=139)
 log_train[:,0] = np.exp(log_train[:,0])
 
 train = np.concatenate([ train, log_train])
-np.save("train_uq.npy", train)
+np.save("kd_ff_train.npy", train)
