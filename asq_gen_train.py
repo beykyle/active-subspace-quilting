@@ -8,7 +8,7 @@ import rose
 from rose.koning_delaroche import KD_simple, KD_simple_so, KDGlobal, Projectile
 from rose.training import latin_hypercube_sample
 
-cgmf_ebin = np.linspace(0.01, 10, 200)
+cgmf_ebin = np.linspace(0.1, 10, 200)
 ebounds = np.array([cgmf_ebin[0], cgmf_ebin[-1]])
 E_GRID_SIZE = cgmf_ebin.size
 E_GRID = cgmf_ebin
@@ -75,9 +75,8 @@ frozen_params = bounds[:,1] == bounds[:,0]
 unfrozen_mask = np.logical_not(frozen_params)
 np.save("./kd_ff_bounds.npy", bounds)
 
-n_train = 3000
-n_train_log = 500
-n_test = 1000
+n_train = 2400
+n_train_log = 8000
 
 train = latin_hypercube_sample(n_train, bounds, seed=137)
 

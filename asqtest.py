@@ -10,12 +10,14 @@ from rose.koning_delaroche import EnergizedKoningDelaroche
 from rose import ScatteringAmplitudeEmulator
 
 l_max=10
-angles = np.linspace(0, np.pi, 200)
-s_mesh = np.linspace(1e-2, 8 * np.pi, 1000)
+angles = np.linspace(0, np.pi, 10)
+s_mesh = np.linspace(1e-2, 6 * np.pi, 1200)
 domain = np.array([s_mesh[0], s_mesh[-1]])
-s_0 = 7 * np.pi
+s_0 = 5.5 * np.pi
 bounds = np.load("./kd_ff_bounds.npy")
 train = np.load("./kd_ff_train.npy")
+frozen_params = bounds[:,1] == bounds[:,0]
+unfrozen_mask = np.logical_not(frozen_params)
 
 # use log(E) space
 scaleE = 1.0
@@ -52,10 +54,12 @@ asq = rose.ActiveSubspaceQuilt(
     None,
     None,
     frozen_params,
-    50,
-    0.1,
+    70,
+    0.05,
     threads=8,
 )
+np.save("hf_solns_uq_log.npy", asq.hf_solns)
+import pickle
+with open("./asq_emulators.pkl", "wb") as f:
+    pickle.dump(asq.emulators, f)
 
-np.save("kd_ff_hfsoln_train.npy", asq.hf_solns )
-asq.save("asq.pkl")
